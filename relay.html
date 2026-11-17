@@ -1,0 +1,11 @@
+<!doctype html><meta charset=utf-8><title>relay</title><body>relay<script>
+window.addEventListener('message', async e => {
+  if (!e.data || e.data.want === undefined) return;
+  try {
+    const r = await fetch(e.data.want);
+    const b = await r.blob();
+    e.source.postMessage({ name: e.data.name, blob: b }, '*');
+  } catch (err) { e.source.postMessage({ error: String(err) }, '*'); }
+});
+if (window.opener) window.opener.postMessage({ relayReady: true }, '*');
+</script>
